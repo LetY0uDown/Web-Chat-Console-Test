@@ -8,11 +8,7 @@ var connection = new HubConnectionBuilder().WithUrl("https://localhost:7044/chat
 Console.ForegroundColor = ConsoleColor.Gray;
 
 connection.On<Message>("Receive", message => {
-    Console.ForegroundColor = message.TextColor;
-
-    Console.WriteLine($"\n{message}\n");
-
-    Console.ForegroundColor = ConsoleColor.Gray;
+    WriteConsoleMessage("\n{message}\n", message.TextColor);
 });
 
 Console.Write("Введите ваш никнейм >> ");
@@ -24,13 +20,11 @@ Console.WriteLine("Вы вошли в чат. Введите '/exit' чтобы 
 
 var personalColor = (ConsoleColor)Random.Shared.Next(1, 15);
 
-Console.ForegroundColor = personalColor;
-Console.WriteLine("Так выглядит цвет ваших сообщений у других пользователей");
-Console.ForegroundColor = ConsoleColor.Gray;
+WriteConsoleMessage("Так выглядит цвет ваших сообщений у других пользователей\n", personalColor);
 
 await SendServerMessageAsync($"{username} вошёл в чат");
 
-while (true)
+while (connection.State == HubConnectionState.Connected)
 {
     var msg = Console.ReadLine();
 
@@ -55,4 +49,11 @@ await connection.StopAsync();
 async Task SendServerMessageAsync(string text)
 {
     await connection.InvokeAsync(SEND, new Message(text, "SERVER", ConsoleColor.White));
+}
+
+static void WriteConsoleMessage(string msg, ConsoleColor foreground)
+{
+    Console.ForegroundColor = foreground;
+    Console.WriteLine(msg);
+    Console.ForegroundColor = ConsoleColor.Gray;
 }
