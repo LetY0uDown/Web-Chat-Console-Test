@@ -37,6 +37,12 @@ while (true)
     if (msg == "/exit")
         break;
 
+    if (string.IsNullOrWhiteSpace(msg))
+    {
+        Console.WriteLine("Вы ввели пустое сообщение! Низя так");
+        continue;
+    }
+
     await connection.InvokeAsync(SEND, new Message(msg, username, personalColor));
 }
 
