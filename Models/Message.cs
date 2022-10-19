@@ -2,7 +2,7 @@
 
 namespace Models;
 
-public class Message
+public record class Message
 {
     [JsonConstructor]
     public Message(string text, string username, ConsoleColor textColor)

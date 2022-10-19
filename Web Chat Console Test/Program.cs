@@ -8,7 +8,7 @@ var connection = new HubConnectionBuilder().WithUrl("https://localhost:7044/chat
 Console.ForegroundColor = ConsoleColor.Gray;
 
 connection.On<Message>("Receive", message => {
-    WriteConsoleMessage("\n{message}\n", message.TextColor);
+    WriteConsoleMessage($"\n{message}\n", message.TextColor);
 });
 
 Console.Write("Введите ваш никнейм >> ");
